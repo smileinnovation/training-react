@@ -12,7 +12,7 @@
 - Class components, with their states and props
 - Function components and hooks
 - HoC components, composition
-- Application context, extented to the usage of react-sweet-state
+- Application context, extended to the usage of react-sweet-state
 
 ## 3) Training logic
 
