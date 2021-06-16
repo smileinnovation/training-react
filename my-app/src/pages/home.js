@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
+import { Tab } from "semantic-ui-react";
 import Layout from '../components/layout';
-import Todos from '../services/todos';
+import todoSvc from '../services/todos';
 import TodoList from '../components/todos/todoList';
+import SomethingElseList from '../components/somethingElse/somethingElseList';
 
-const todosSvc = new Todos();
+const panes = [
+    { menuItem: 'Todos', render: () => <TodoList todoSvc={todoSvc} /> },
+    { menuItem: 'Something Else', render: () => <SomethingElseList /> }
+];
 
 class Home extends Component {
     render() {
         return (
             <Layout>
-                <TodoList todoSvc={todosSvc} />
+                <Tab panes={panes}/>
             </Layout>
         )
     }

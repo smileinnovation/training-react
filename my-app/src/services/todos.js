@@ -50,10 +50,17 @@ class Todos {
 
     getAll() { return Promise.resolve(this._todos); }
     getById(id) { return Promise.resolve(this._todos.find(t => t.id === id)) }
-    setTaskDone(id) { return Promise.resolve(this._setTodoField(id, 'done', true)); }
-    unsetTaskDone(id) { return Promise.resolve(this._setTodoField(id, 'done', false)); }
+    setTaskDone(id) {
+        this._setTodoField(id, 'done', true);
+        return Promise.resolve();
+    }
+    unsetTaskDone(id) {
+        this._setTodoField(id, 'done', false);
+        return Promise.resolve();
+    }
     setTaskPriority(id, priority) { return Promise.resolve(this._setTodoField(id, 'priority', priority)); }
     setTaskDescription(id, description) { return Promise.resolve(this._setTodoField(id, 'description', description)); }
 }
 
-export default Todos;
+const todoSvc = new Todos();
+export default todoSvc;
