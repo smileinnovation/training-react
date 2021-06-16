@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class SomethingElseList extends Component {
-    render() {
-        return (
-            <div>Something else</div>
-        )
-    }
+const SomethingElseList = () => {
+    return (
+        <div>Something else</div>
+    )
 }
 
 export default SomethingElseList;
