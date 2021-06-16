@@ -48,7 +48,13 @@ class Todos {
         return Promise.resolve(true);
     }
 
-    getAll() { return Promise.resolve(this._todos); }
+    getAll() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(this._todos);
+            }, 200);
+        });
+    }
     getById(id) { return Promise.resolve(this._todos.find(t => t.id === id)) }
     setTaskDone(id) {
         this._setTodoField(id, 'done', true);
@@ -58,6 +64,7 @@ class Todos {
         this._setTodoField(id, 'done', false);
         return Promise.resolve();
     }
+
     setTaskPriority(id, priority) { return Promise.resolve(this._setTodoField(id, 'priority', priority)); }
     setTaskDescription(id, description) { return Promise.resolve(this._setTodoField(id, 'description', description)); }
 }
