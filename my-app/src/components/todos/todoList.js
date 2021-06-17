@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useContext } from 'react';
 import { Table, Loader } from "semantic-ui-react";
 import TodoItem from "./todoItem";
 import NewTodo from "./newTodo";
-import WithLoading from "../withLoading";
+import { TodoContext } from "../../context/todoContext";
+//import WithLoading from "../withLoading";
 
 const orderByTaskPriority = (t1, t2) => {
     if(t1.priority < t2.priority) return -1;
@@ -10,19 +11,21 @@ const orderByTaskPriority = (t1, t2) => {
     return 0;
 };
 
-const TodoList = ({todos, todoSvc, refreshTodos}) => {
+const TodoList = () => {
+    const { todos, refreshTodos, isLoading, add, removeById, setTaskDone, unsetTaskDone } = useContext(TodoContext);
+
     const onCreateNewTodo = async (todo) => {
-        await todoSvc.add(todo.title, todo.priority, todo.description);
+        await add(todo.title, todo.priority, todo.description);
         await refreshTodos();
     }
 
     const toggleTaskStatus = async (todo) => {
-        await (todo.done ? todoSvc.unsetTaskDone(todo.id) : todoSvc.setTaskDone(todo.id));
+        await (todo.done ? unsetTaskDone(todo.id) : setTaskDone(todo.id));
         await refreshTodos();
     }
 
     const removeTask = async (id) => {
-        await todoSvc.removeById(id);
+        await removeById(id);
         await refreshTodos();
     }
 
@@ -50,10 +53,12 @@ const TodoList = ({todos, todoSvc, refreshTodos}) => {
 
 }
 
+export default TodoList;
+
 const TodoListLoader = () => <div id="todos"><Loader active inline='centered' >Retrieving Todos...</Loader></div>
+//const TodoListWithLoading = WithLoading(TodoList, TodoListLoader);
 
-const TodoListWithLoading = WithLoading(TodoList, TodoListLoader);
-
+/*
 const TodoListWrapper = ({todoSvc}) => {
     const [ isLoading, setIsLoading] = useState(false);
     const [ todos, setTodos ] = useState([]);
@@ -77,4 +82,4 @@ const TodoListWrapper = ({todoSvc}) => {
     />
 }
 
-export default TodoListWrapper;
+export default TodoListWrapper;*/

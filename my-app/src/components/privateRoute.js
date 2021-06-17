@@ -1,9 +1,9 @@
-import React  from "react"
-import { withAuthService } from "./withAuthService";
+import React, { useContext }  from "react"
+import { AuthContext } from "../context/authContext";
 import Login from '../pages/login';
 
 const PrivateRoute = ({ component: Component, location, ...rest }) => {
-    const authService = rest.authService;
+    const authService = useContext(AuthContext);
     if(authService.isLoggedIn()) {
         return <Component {...rest} user={authService.getUser()}/>
     } else {
@@ -11,4 +11,4 @@ const PrivateRoute = ({ component: Component, location, ...rest }) => {
     }
 }
 
-export default withAuthService(PrivateRoute);
+export default PrivateRoute;

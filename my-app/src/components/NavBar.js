@@ -1,13 +1,14 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Menu, Container, Icon } from "semantic-ui-react";
-import authSvc from "../services/authService";
 import {NavLink, useHistory} from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
 const NavBar = () => {
     const history = useHistory();
+    const authService = useContext(AuthContext);
     const [ activeItem, setActiveItem ] = useState("");
     const logout = () => {
-        authSvc.logout();
+        authService.logout();
         history.replace('/');
     }
 
@@ -22,7 +23,7 @@ const NavBar = () => {
                         <Icon name="lock" />
                         Private
                     </Menu.Item>
-                    {authSvc.isLoggedIn() ?
+                    {authService.isLoggedIn() ?
                     <Menu.Item position='right' name="Logout" onClick={e => {
                         e.preventDefault()
                         logout();
