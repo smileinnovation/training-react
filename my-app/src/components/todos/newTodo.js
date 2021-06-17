@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Modal, Container, Button, Icon, Form } from "semantic-ui-react";
+import {TodoContext} from "../../context/todoContext";
 
 const defaultTodo = {
     title:'',
@@ -7,11 +8,13 @@ const defaultTodo = {
     description:'',
 }
 
-const NewTodo = ({onCreateNewTodo}) => {
+const NewTodo = () => {
     const [ showNewTaskModal, setShowNewTaskModal] = useState(false);
     const [newTodo, setNewTodo] = useState({...defaultTodo});
     const [dirty, setDirty ] = useState(false);
     const [errors, setErrors] = useState({});
+
+    const { add, refreshTodos } = useContext(TodoContext);
 
     const checkFields = (todo, errors) => {
         // empty fields
@@ -48,9 +51,10 @@ const NewTodo = ({onCreateNewTodo}) => {
 
     }
 
-    const onCreateNewTask = () => {
+    const onCreateNewTask = async () => {
         setShowNewTaskModal(false);
-        onCreateNewTodo(newTodo);
+        await add(newTodo.title, newTodo.priority, newTodo.description);
+        await refreshTodos();
     }
 
     return (

@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Table, Icon, Popup, Button } from "semantic-ui-react";
+import {TodoContext} from "../../context/todoContext";
 
-const TodoItem = ({todo, toggleStatus, removeTask}) => {
+const TodoItem = ({todo}) => {
+
+    const { refreshTodos, setTaskDone, unsetTaskDone, removeById } = useContext(TodoContext)
+
+    const toggleStatus = async () => {
+        await (todo.done ? unsetTaskDone(todo.id) : setTaskDone(todo.id));
+        await refreshTodos();
+    }
+
+    const removeTask = async () => {
+        await removeById(todo.id);
+        await refreshTodos();
+    }
+
     return (
         <Table.Row>
             <Table.Cell>

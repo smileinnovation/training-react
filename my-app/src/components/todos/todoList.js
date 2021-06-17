@@ -3,7 +3,7 @@ import { Table, Loader } from "semantic-ui-react";
 import TodoItem from "./todoItem";
 import NewTodo from "./newTodo";
 import { TodoContext } from "../../context/todoContext";
-//import WithLoading from "../withLoading";
+import WithLoading from "../withLoading";
 
 const orderByTaskPriority = (t1, t2) => {
     if(t1.priority < t2.priority) return -1;
@@ -12,26 +12,11 @@ const orderByTaskPriority = (t1, t2) => {
 };
 
 const TodoList = () => {
-    const { todos, refreshTodos, isLoading, add, removeById, setTaskDone, unsetTaskDone } = useContext(TodoContext);
-
-    const onCreateNewTodo = async (todo) => {
-        await add(todo.title, todo.priority, todo.description);
-        await refreshTodos();
-    }
-
-    const toggleTaskStatus = async (todo) => {
-        await (todo.done ? unsetTaskDone(todo.id) : setTaskDone(todo.id));
-        await refreshTodos();
-    }
-
-    const removeTask = async (id) => {
-        await removeById(id);
-        await refreshTodos();
-    }
+    const { todos } = useContext(TodoContext);
 
     return (
         <div id="todos">
-            <NewTodo onCreateNewTodo={(todo) => onCreateNewTodo(todo)} />
+            <NewTodo />
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -44,42 +29,20 @@ const TodoList = () => {
                 <Table.Body>
                     {todos
                         .sort(orderByTaskPriority)
-                        .map(t => <TodoItem key={t.id} todo={t} removeTask={() => removeTask(t.id)} toggleStatus={() => toggleTaskStatus(t)}/>)
+                        .map(t => <TodoItem key={t.id} todo={t} />)
                     }
                 </Table.Body>
             </Table>
         </div>
     );
-
 }
-
-export default TodoList;
 
 const TodoListLoader = () => <div id="todos"><Loader active inline='centered' >Retrieving Todos...</Loader></div>
-//const TodoListWithLoading = WithLoading(TodoList, TodoListLoader);
+const TodoListWithLoading = WithLoading(TodoList, TodoListLoader);
 
-/*
-const TodoListWrapper = ({todoSvc}) => {
-    const [ isLoading, setIsLoading] = useState(false);
-    const [ todos, setTodos ] = useState([]);
-
-    const refreshTodos = useCallback(async () => {
-        setIsLoading(true);
-        const todos = await todoSvc.getAll();
-        setTodos(todos);
-        setIsLoading(false);
-    }, [todoSvc]);
-
-    useEffect(() => {
-        refreshTodos();
-    }, [refreshTodos]);
-
-    return <TodoListWithLoading
-        isLoading={isLoading}
-        todos={todos}
-        todoSvc={todoSvc}
-        refreshTodos={refreshTodos}
-    />
+const TodoListWrapper = () => {
+    const { isLoading } = useContext(TodoContext);
+    return <TodoListWithLoading isLoading={isLoading} />
 }
 
-export default TodoListWrapper;*/
+export default TodoListWrapper;
