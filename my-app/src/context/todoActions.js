@@ -2,9 +2,7 @@ import todoSvc from "../services/todos";
 
 const refreshTodo = async (setState) => {
     return todoSvc.getAll()
-        // [...todos] is IMPORTANT HERE, as state mutation is based on object reference equality,
-        // doing so we make sure a refresh call force state mutation
-        .then(todos => setState({todo:{data:[...todos], fetching:false, error:null}}))
+        .then(todos => setState({todo:{data:todos, fetching:false, error:null}}))
         .catch(e => setState({todo:{data:[], fetching:false, error:e}}));
 };
 

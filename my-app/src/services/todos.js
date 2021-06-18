@@ -51,7 +51,10 @@ class Todos {
     getAll() {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                resolve(this._todos);
+                // [...this._todos] is IMPORTANT HERE, as state mutation is based on object reference equality,
+                // doing so we make sure that the service return a new table at each call
+                // (instead of the inner reference of this class)
+                resolve([...this._todos]);
             }, 500);
         });
     }
