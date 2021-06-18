@@ -1,23 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { Table, Icon, Popup, Button } from "semantic-ui-react";
-import {TodoContext} from "../../context/todoContext";
+import { useTodoActions } from "../../context/listStore";
 
 const TodoItem = ({todo}) => {
-
-    const { refreshTodos, setTaskDone, unsetTaskDone, removeById } = useContext(TodoContext)
+    const [itemUpdating, setItemUpdating ] = useState(false);
+    const [, { setTodoDone, unsetTodoDone, removeTodoById }] = useTodoActions();
 
     const toggleStatus = async () => {
-        await (todo.done ? unsetTaskDone(todo.id) : setTaskDone(todo.id));
-        await refreshTodos();
+        if(itemUpdating) return;
+        setItemUpdating(true);
+        await (todo.done ? unsetTodoDone(todo.id) : setTodoDone(todo.id)).then(_ => setItemUpdating(false));
     }
 
     const removeTask = async () => {
-        await removeById(todo.id);
-        await refreshTodos();
+        await removeTodoById(todo.id);
     }
 
     return (
-        <Table.Row>
+        <Table.Row disabled={itemUpdating}>
             <Table.Cell>
                 <Popup content={todo.description} trigger={<span>{todo.title}</span>} />
             </Table.Cell>
@@ -28,7 +28,7 @@ const TodoItem = ({todo}) => {
                 {todo.done ? <Icon link color="blue" name="check"/> : <Icon link color="red" name="x"/>}
             </Table.Cell>
             <Table.Cell>
-                <Button title="remove" icon onClick={removeTask}>
+                <Button title="remove" icon onClick={removeTask} disabled={itemUpdating}>
                     <Icon name='trash' />
                 </Button>
             </Table.Cell>

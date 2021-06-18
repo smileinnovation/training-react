@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Table, Loader } from "semantic-ui-react";
+import { useTodo } from "../../context/listStore";
 import TodoItem from "./todoItem";
 import NewTodo from "./newTodo";
-import { TodoContext } from "../../context/todoContext";
 import WithLoading from "../withLoading";
 
 const orderByTaskPriority = (t1, t2) => {
@@ -12,7 +12,7 @@ const orderByTaskPriority = (t1, t2) => {
 };
 
 const TodoList = () => {
-    const { todos } = useContext(TodoContext);
+    const [todo] = useTodo();
 
     return (
         <div id="todos">
@@ -27,7 +27,7 @@ const TodoList = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {todos
+                    {todo.data
                         .sort(orderByTaskPriority)
                         .map(t => <TodoItem key={t.id} todo={t} />)
                     }
@@ -41,8 +41,8 @@ const TodoListLoader = () => <div id="todos"><Loader active inline='centered' >R
 const TodoListWithLoading = WithLoading(TodoList, TodoListLoader);
 
 const TodoListWrapper = () => {
-    const { isLoading } = useContext(TodoContext);
-    return <TodoListWithLoading isLoading={isLoading} />
+    const [todo] = useTodo();
+    return <TodoListWithLoading isLoading={todo.fetching} />
 }
 
 export default TodoListWrapper;

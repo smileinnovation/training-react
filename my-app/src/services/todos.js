@@ -52,7 +52,7 @@ class Todos {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve(this._todos);
-            }, 200);
+            }, 500);
         });
     }
     getById(id) { return Promise.resolve(this._todos.find(t => t.id === id)) }
